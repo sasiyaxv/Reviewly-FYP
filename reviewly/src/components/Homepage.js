@@ -1,18 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Footer from "./Footer";
+import Header from "./Header";
 
 export default function Homepage() {
   return (
     <div>
-      <h2>Homepage</h2>
+      <Header />
       <div>
         <Link to={`/register`}>
-          <button>Register</button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            Register
+          </button>
         </Link>
         <Link to={`/login`}>
-          <button>Login</button>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+            Login
+          </button>
         </Link>
       </div>
+      <Footer />
     </div>
   );
 }
