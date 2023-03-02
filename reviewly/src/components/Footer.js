@@ -1,6 +1,6 @@
 import React from "react";
-import { MDBIcon } from "mdb-react-ui-kit";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { MDBIcon } from "mdb-react-ui-kit";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Footer() {
   return (

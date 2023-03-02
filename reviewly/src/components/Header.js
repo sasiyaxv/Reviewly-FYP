@@ -12,7 +12,7 @@ export default function Header() {
             </h1>
           </div>
           <div className="hidden md:flex space-x-6">
-            <a href="#" className="hover:text-gray-400">
+            <a href="analyse" className="hover:text-gray-400">
               Analyze
             </a>
             <a href="#" className="hover:text-gray-400">

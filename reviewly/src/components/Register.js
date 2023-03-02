@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
+
+import { collection, getDocs, addDoc } from "firebase/firestore";
+import { db } from "../firebase-config";
 
 export default function Register() {
   const [fname, setFname] = useState("");
@@ -9,7 +12,35 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  function registerClicked() {}
+  const [users, setUsers] = useState([]);
+
+  const usersRef = collection(db, "ReviewlyDb");
+
+  const registerClicked = async () => {
+    await addDoc(usersRef, {
+      fName: fname,
+      lName: lname,
+      email: email,
+      password: password,
+    });
+  };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const data = await getDocs(usersRef);
+      setUsers(
+        data.docs.map((doc) => ({
+          ...doc.data(),
+          name: doc.name,
+          lname: doc.lName,
+          email: doc.email,
+          reviews: doc.reviews,
+        }))
+      );
+      console.log(data);
+    };
+    getUsers();
+  }, []);
 
   return (
     <div>
@@ -78,9 +109,20 @@ export default function Register() {
                 placeholder="Confirm password"
               />
             </div>
-            <button className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded">
+            <button
+              onClick={registerClicked}
+              className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded"
+            >
               SignUp
             </button>
+            {users.map((user) => {
+              return (
+                <div>
+                  <h1>{user.name}</h1>
+                  <h2>{user.email}</h2>
+                </div>
+              );
+            })}
           </form>
         </div>
       </div>

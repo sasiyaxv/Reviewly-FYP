@@ -6,6 +6,9 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Analyse from "./components/Analyse";
 
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase-config";
+
 const router = createBrowserRouter([
   {
     path: "/",
