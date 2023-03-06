@@ -1,23 +1,38 @@
 import React from "react";
-// import { MDBIcon } from "mdb-react-ui-kit";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Footer() {
   return (
     <div>
-      <footer>
-        {/* <div className="container flex flex-col-reverse justify-between px-6 py-10 mx-auto space-y-7 md:flex-row md:space-y-0">
-          <flex className="container flex flex-col-reverse items-center justify-between space-y-12 md:flex-col md:space-y-0 md:items-start">
-            <h1 className="text-4xl font-extrabold dark:text-black">
-              Reviewly
-            </h1>
-            <flex className="flex justify-center space-x-4">
-              <a href="#">
-                <FontAwesomeIcon icon={["fab", "facebook-f"]} size="lg" />
-              </a>
-            </flex>
-          </flex>
-        </div> */}
+      <footer className="fixed bottom-0 left-0 z-20 w-full p-4 bg-white border-t border-gray-200 shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800 dark:border-gray-600">
+        <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+          © 2023{" "}
+          <a href="https://flowbite.com/" className="hover:underline">
+            Reviewly™
+          </a>
+          . All Rights Reserved.
+        </span>
+        <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+          <li>
+            <a href="#" className="mr-4 hover:underline md:mr-6 ">
+              About
+            </a>
+          </li>
+          <li>
+            <a href="#" className="mr-4 hover:underline md:mr-6">
+              Privacy Policy
+            </a>
+          </li>
+          <li>
+            <a href="#" className="mr-4 hover:underline md:mr-6">
+              Licensing
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:underline">
+              Contact
+            </a>
+          </li>
+        </ul>
       </footer>
     </div>
   );

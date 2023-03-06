@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -7,18 +8,20 @@ export default function Header() {
         <flex className="flex item-center justify-between">
           <div className="pt-2">
             {/* <img src="review.png" alt="logo" /> */}
-            <h1 className="text-4xl font-extrabold dark:text-black">
-              Reviewly
-            </h1>
+            <a href="/">
+              <h1 className="text-4xl font-extrabold dark:text-black">
+                Reviewly
+              </h1>
+            </a>
           </div>
           <div className="hidden md:flex space-x-6">
             <a href="analyse" className="hover:text-gray-400">
               Analyze
             </a>
-            <a href="#" className="hover:text-gray-400">
+            <a href="about" className="hover:text-gray-400">
               About
             </a>
-            <a href="#" className="hover:text-gray-400">
+            <a href="contact" className="hover:text-gray-400">
               Contact
             </a>
           </div>

@@ -5,6 +5,8 @@ import Homepage from "./components/Homepage";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Analyse from "./components/Analyse";
+import About from "./components/About";
+import Contact from "./components/Contact";
 
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase-config";
@@ -26,25 +28,19 @@ const router = createBrowserRouter([
     path: "/analyse",
     element: <Analyse />,
   },
+  {
+    path: "/about",
+    element: <About />,
+  },
+  {
+    path: "/contact",
+    element: <Contact />,
+  },
 ]);
 
 function App() {
   return (
     <div className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header> */}
       <RouterProvider router={router} />
     </div>
   );
