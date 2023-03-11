@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 // .env file create and store API keys
 const firebaseConfig = {
@@ -10,9 +9,28 @@ const firebaseConfig = {
   storageBucket: "reviewly-c43dc.appspot.com",
   messagingSenderId: "603257753158",
   appId: "1:603257753158:web:58b5e4836155aab2e2c447",
-  measurementId: "G-6BPT0FMRET",
-};
+  measurementId: "G-6BPT0FMRET"
+}; 
 
 const app = initializeApp(firebaseConfig);
 
-export const db = getFirestore(app);
+export const auth = getAuth(app);
+// export const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+
+export const signInWithGoogle = () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      const name = result.user.displayName;
+      const email = result.user.email;
+      const profilePic = result.user.photoURL;
+
+      localStorage.setItem("name", name);
+      localStorage.setItem("email", email);
+      localStorage.setItem("profilePic", profilePic);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};

@@ -5,7 +5,7 @@ export default function ResultBox(props) {
     props.onDelete(props.id);
   }
   return (
-    <div className="box-border h-32 w-32 p-4 border-4">
+    <div className="box-border h-32 w-screen p-4 border-4">
       <div>{props.review}</div>
       <button
         onClick={handleClick}

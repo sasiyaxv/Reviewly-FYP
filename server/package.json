@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "crawler": "^1.4.0",
     "deepl-translator": "^1.2.1",

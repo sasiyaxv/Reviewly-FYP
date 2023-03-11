@@ -5,12 +5,18 @@ const bodyParser = require("body-parser");
 const app = express();
 const { execFile } = require("child_process");
 
+const sqlite3 = require("sqlite3").verbose();
+
 const re = require("re");
 
+// ADD THIS
+var cors = require("cors");
+app.use(cors());
+
 // Middleware for parsing request bodies
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.json());
+// app.use(express.json());
 
 app.get("/hello", (req, res, next) => {
   res.send("This is the hello response");
@@ -48,8 +54,8 @@ app.post("/toSinhala/:str", (req, res) => {
   );
 });
 
-app.post("/toEnglish/:str", (req, res) => {
-  const sentence = req.params.str;
+app.post("/toEnglish", (req, res) => {
+  const sentence = req.body.str;
 
   if (!sentence) {
     return res.status(400).send("No sentence provided");
@@ -70,7 +76,9 @@ app.post("/toEnglish/:str", (req, res) => {
       console.log(`stdout: ${stdout}`);
       console.error(`stderr: ${stderr}`);
 
-      res.send(`${stdout}`);
+      res.json({
+        result: `${stdout}`,
+      });
     }
   );
 });
@@ -87,19 +95,56 @@ app.post("/isEnglish/:str", (req, res) => {
   return isEnglishLetters;
 });
 
-app.get("/isSinhala/:str", (req, res) => {
-  const sentence = req.params.str;
+app.post("/isSinhala", (req, res) => {
+  const sentence = req.body.str;
+  console.log("Body :" + sentence);
 
   if (!sentence) {
     return res.status(400).send("No sentence provided");
   }
 
   const isSinhala = /^[\u0D80-\u0DFF\u200D\s]+$/.test(sentence);
-  res.send(isSinhala);
+  res.json({
+    result: isSinhala,
+  });
 });
 
 app.get("*", (req, res) => {
   res.send("Invalid route");
+});
+
+// user actions
+
+const db = new sqlite3.Database("logins.db", (err) => {
+  if (err) {
+    console.error(err.message);
+  } else {
+    console.log("Connected to the database.");
+  }
+});
+
+// Create user
+
+app.post("/createuser", (req, res) => {
+  const { id, fName, lName, mail, passWord, reviews } = req.body;
+
+  console.log("ID" + id);
+  const fname = req.body.fname;
+  console.log(fname);
+
+  db.run(
+    `INSERT INTO reviewly(userId,firstName,lastName,email,password,reviews) VALUES (?,?,?,?,?,?)`,
+    [id, fName, lName, mail, passWord, reviews],
+    function (err) {
+      if (err) {
+        console.error(err.message);
+        res.status(500).send("Error inserting record.");
+      } else {
+        console.log(`A row has been inserted with rowid ${this.lastID}`);
+        res.send("Record inserted successfully.");
+      }
+    }
+  );
 });
 
 // Server listening to port 3001

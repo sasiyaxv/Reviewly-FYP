@@ -18,8 +18,8 @@ export default function Header() {
             <a href="analyse" className="hover:text-gray-400">
               Analyze
             </a>
-            <a href="about" className="hover:text-gray-400">
-              About
+            <a href="previous" className="hover:text-gray-400">
+              Previous Reults
             </a>
             <a href="contact" className="hover:text-gray-400">
               Contact
@@ -29,7 +29,7 @@ export default function Header() {
             href="#"
             className="hidden md:block p-3 px-6 pt-2 text-white bg-red-500 rounded-full baseline hover:bg-red-800"
           >
-            Get Started
+            Signup
           </a>
         </flex>
       </nav>
