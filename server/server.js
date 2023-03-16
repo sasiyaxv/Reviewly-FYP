@@ -9,6 +9,8 @@ const sqlite3 = require("sqlite3").verbose();
 
 const re = require("re");
 
+const tf = require("@tensorflow/tfjs");
+
 // ADD THIS
 var cors = require("cors");
 app.use(cors());
@@ -107,6 +109,17 @@ app.post("/isSinhala", (req, res) => {
   res.json({
     result: isSinhala,
   });
+});
+
+app.post("/makePrediction", async (req, res) => {
+  const sentence = req.body.str;
+  try {
+    const model = await tf.loadLayersModel("model2.h5");
+  } catch (error) {
+    console.log(error);
+  }
+
+  res.send("Done");
 });
 
 app.get("*", (req, res) => {
