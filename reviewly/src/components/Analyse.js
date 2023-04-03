@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-
+import axios from "axios";
 import Header from "./Header";
 
 import { collection, getDocs } from "firebase/firestore";
@@ -34,43 +34,39 @@ export default function Analyse() {
     } else {
       console.log("Text" + link);
 
-      // fetch("http://localhost:3001/isSinhala", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     str: link,
-      //   }),
-      // })
-      //   .then((response) => response.json())
-      //   .then((response) => console.log(response.result))
-      //   .then((response) => SetSinhala(response.result))
-      //   .catch((error) => console.error(error));
+      axios
+        .post("http://localhost:5000/toSinhala", {
+          string: link,
+        })
+        .then(function (response) {
+          axios
+            .post("http://localhost:5000/toEnglish", {
+              string: response.data,
+            })
+            .then(function (response) {
+              console.log(response.data);
+              setEnglishConverted(response.data);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
-      fetch("http://localhost:3001/toEnglish", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          str: link,
-        }),
-      })
-        .then((response) => response.json())
-        .then((response) => console.log(response.result))
-        .then((response) => setEnglishConverted(response.result))
-        .catch((error) => console.error(error));
-
-      console.log("English " + englishConverted);
-
-      const id = new Date().getTime(); // Generate a unique ID
+      // Generate a unique ID
+      const id = new Date().getTime();
       setComponents((components) => [
         ...components,
         {
           id: id,
           component: (
-            <ResultBox id={id} review={link} onDelete={handleDelete} />
+            <ResultBox
+              id={id}
+              review={setEnglishConverted}
+              onDelete={handleDelete}
+            />
           ),
         },
       ]);
@@ -118,10 +114,6 @@ export default function Analyse() {
             placeholder="Review"
           ></textarea>
 
-          {/* <p className="invisible peer-invalid:visible text-red-700 font-light">
-            Please enter a valid email address
-          </p> */}
-
           <button
             id="analyseBtn"
             onClick={handleClick}
@@ -149,6 +141,8 @@ export default function Analyse() {
           <div key={c.id}>{c.component}</div>
         ))}
       </div>
+
+      {englishConverted}
       {/* <div className="flex-container">
         {components.map((c) => (
           <ResultBox key={c.id} review={c.link} onDelete={handleDelete} />
