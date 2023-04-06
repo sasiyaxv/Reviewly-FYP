@@ -1,65 +1,49 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
-//const axios = require('axios'); // legacy way
+import { BASE_URL, PYTHON_ANYWHERE_URL } from "./constants";
 
-export const sayHello = () => {
-  axios
-    .get(BASE_URL + "hello")
-    .then(function (response) {
-      // handle success
-      console.log(response.data);
-      return response;
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    .finally(function () {
-      // always executed
-    });
+export const convertToSinhala = async (sentence) => {
+  const response = await axios.post(PYTHON_ANYWHERE_URL + "toSinhala", {
+    string: sentence,
+  });
+  return response.data;
 };
 
-export const convertToSinhala = (sentence) => {
-  axios
-    .post(BASE_URL + "toSinhala/" + sentence, {
-      // str: sentence,
-    })
-    .then(function (response) {
-      console.log("Server Response :" + response.data);
-      return response.data;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+export const isEnglish = async (sentence) => {
+  const response = await axios.post(PYTHON_ANYWHERE_URL + "isEnglish", {
+    string: sentence,
+  });
+  return response.data;
 };
 
-export function translateToEnglish(sentence) {
-  axios
-    .post(BASE_URL + "toEnglish/" + sentence, {
-      // str: sentence,
-    })
+export const isSinhala = async (sentence) => {
+  const response = await axios.post(PYTHON_ANYWHERE_URL + "isSinhala", {
+    string: sentence,
+  });
+  return response.data;
+};
 
-    .then(function (response) {
-      console.log(response);
-      return response;
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
+export const textBlob = async (sentence) => {
+  const response = await axios.post(
+    PYTHON_ANYWHERE_URL + "getPredictionTextBlob",
+    {
+      string: sentence,
+    }
+  );
+  return response.data;
+};
 
-export function isSinhala(sentence) {
-  axios
-    .post(BASE_URL + "isSinhala", {
-      str: sentence,
-    })
+export const translateToEnglish = async (sentence) => {
+  const response = await axios.post(PYTHON_ANYWHERE_URL + "toEnglish", {
+    string: sentence,
+  });
+  return response.data;
+};
 
-    .then(function (response) {
-      console.log("Response server : " + response);
-      return response;
-    })
-
-    .catch(function (error) {
-      console.log(error);
-    });
-}
+export const contactDeveloper = async ({ email, heading, message }) => {
+  const response = await axios.post(BASE_URL + "contactUs", {
+    email: email,
+    header: heading,
+    message: message,
+  });
+  return response.data;
+};

@@ -6,7 +6,7 @@ import re
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import transliterate
-
+from textblob import TextBlob
 from deep_translator import GoogleTranslator
 
 
@@ -84,6 +84,18 @@ def prediction():
         return "negative"
     elif (np.argmax(sentiment) == 1):
         return "positive"
+    
+@app.route("/getPredictionTextBlob",methods=['GET','POST'])
+def blob():
+    data = request.json
+    sentence = data['string']
+    b = TextBlob(sentence)
+    print(b.sentiment.polarity)
+    
+    if(b.sentiment.polarity > 0.5):
+        return "positive"
+    else: 
+        return "negative"
 
 if __name__ == '__main__':
     app.run(debug=True)

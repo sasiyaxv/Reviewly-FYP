@@ -1,81 +1,66 @@
-import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useRef } from "react";
+
 import Header from "./Header";
-
-import { collection, getDocs } from "firebase/firestore";
-
-import { db } from "../firebase-config";
 import Footer from "./Footer";
-import ResultBox from "./ResultBox";
-import { sayHello, convertToSinhala, isSinhala } from "../ApiCalls";
+import {
+  convertToSinhala,
+  isSinhala,
+  textBlob,
+  translateToEnglish,
+} from "../ApiCalls";
 
 export default function Analyse() {
   const [link, setLink] = useState("");
-  const [components, setComponents] = useState([]);
-
-  const [transliterated, setTransliterated] = useState("");
-  const [translated, setTranslated] = useState("");
-  const [analysed, setAnalysed] = useState("");
-
-  const [sinhala, SetSinhala] = useState("");
-  const [englishConverted, setEnglishConverted] = useState("");
 
   const [fileContent, setFileContent] = useState([]);
 
-  const [arrayOfReviews, setarrayOfReviews] = useState([]);
+  const [arrayOfReviews, setarrayOfReviews] = useState({});
 
-  useEffect(() => {
-    console.log(components);
-  }, [components]);
+  const getInitialState = () => {
+    const value = "LSTM Model";
+    return value;
+  };
+
+  const [value, setValue] = useState(getInitialState);
+
+  const handleChange = (e) => {
+    setValue(e.target.value);
+  };
+
+  async function textBlobAnalyze() {
+    if (link === "") {
+      console.log("Review empty.");
+      alert("Please Enter a Valid Review");
+    } else {
+      const allSinhala = await isSinhala(link);
+
+      if (allSinhala == "True") {
+        const translatedTxt = await translateToEnglish(link);
+        const sentiment = await textBlob(translatedTxt);
+        const newPair = { [link]: sentiment };
+
+        setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+      }
+      const transliteratedTxt = await convertToSinhala(link);
+
+      const translatedTxt = await translateToEnglish(transliteratedTxt);
+
+      const sentiment = await textBlob(translatedTxt);
+
+      const newPair = { [link]: sentiment };
+
+      setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+    }
+  }
 
   function handleClick() {
     if (link === "") {
       console.log("Review empty.");
-    } else {
-      console.log("Text" + link);
-
-      axios
-        .post("http://localhost:5000/toSinhala", {
-          string: link,
-        })
-        .then(function (response) {
-          axios
-            .post("http://localhost:5000/toEnglish", {
-              string: response.data,
-            })
-            .then(function (response) {
-              console.log(response.data);
-              setEnglishConverted(response.data);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-      // Generate a unique ID
-      const id = new Date().getTime();
-      setComponents((components) => [
-        ...components,
-        {
-          id: id,
-          component: (
-            <ResultBox
-              id={id}
-              review={setEnglishConverted}
-              onDelete={handleDelete}
-            />
-          ),
-        },
-      ]);
+    } else if (value == "textblob") {
+      textBlobAnalyze();
     }
   }
-
-  function handleDelete(id) {
-    setComponents((components) => components.filter((c) => c.id !== id));
-  }
+  function downloadResults() {}
 
   const inputFileRef = useRef(null);
 
@@ -84,7 +69,6 @@ export default function Analyse() {
     const reader = new FileReader();
     reader.onload = function (event) {
       const fileContent = event.target.result;
-      console.log("sasas" + fileContent);
 
       const array = fileContent.split(",");
       setFileContent(array);
@@ -113,6 +97,18 @@ export default function Analyse() {
             className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Review"
           ></textarea>
+          <div>
+            <select
+              className="w-1/2 p-2.5 mt-3 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600"
+              value={value}
+              onChange={handleChange}
+            >
+              <option value="LSTM">LSTM Model</option>
+              <option value="textblob">Text Blob API</option>
+              {/* <option value="Cherry">Cherry</option> */}
+            </select>
+            <p>{`You selected ${value}`}</p>
+          </div>
 
           <button
             id="analyseBtn"
@@ -128,26 +124,30 @@ export default function Analyse() {
           >
             Upload
           </button>
+
           <input
             type="file"
             ref={inputFileRef}
             onChange={handleFileSelect}
             style={{ display: "none" }}
           />
+
+          <button
+            id="downloadBtn"
+            onClick={downloadResults}
+            className="bg-green-500 p-2 m-4 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded"
+          >
+            Download
+          </button>
         </div>
       </div>
-      <div className="flex-container">
-        {components.map((c) => (
-          <div key={c.id}>{c.component}</div>
+      <ul>
+        {Object.keys(arrayOfReviews).map((key) => (
+          <li key={key}>
+            {key}: {arrayOfReviews[key]}
+          </li>
         ))}
-      </div>
-
-      {englishConverted}
-      {/* <div className="flex-container">
-        {components.map((c) => (
-          <ResultBox key={c.id} review={c.link} onDelete={handleDelete} />
-        ))}
-      </div> */}
+      </ul>
       <Footer />
     </div>
   );

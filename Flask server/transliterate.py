@@ -27,7 +27,7 @@ nVowels=26
 specialConsonantsUni.extend(['ං','ඃ','ඞ','ඍ'])
 
 specialConsonants.extend(["\\n","\\h","\\N","\\R"])
-# special characher Repaya
+
 specialConsonantsUni.append('ර්'+'\u200D')
 specialConsonantsUni.append('ර්'+'\u200D')
 
@@ -49,14 +49,11 @@ specialCharUni.append('ෲ')
 specialChar.append('ruu')
 specialCharUni.append('ෘ')
 specialChar.append('ru')
-# specialCharUni.append('්‍ර')
-# specialChar.append('ra')
 
 def Translate(text):
     # special consonents
     for i in range (0,len(specialConsonants)):
         text = text.replace(specialConsonants[i], specialConsonantsUni[i])
-
 
     # consonents + special
     for i in range (0,len(specialCharUni)):
@@ -65,8 +62,6 @@ def Translate(text):
             v = consonantsUni[j] + specialCharUni[i]
             r = s
             text = text.replace(r, v)
-
-
 
     # consonants + Rakaransha + vowel modifiers
     for j in range(0,len(consonants)):
@@ -82,7 +77,6 @@ def Translate(text):
         r = v
         text = text.replace(r, v)
 
-
     # constants with vowels modifiers
     for i in range(0,len(consonants)):
         for j in range(0,nVowels):
@@ -91,25 +85,14 @@ def Translate(text):
             r = s
             text = text.replace(r, v)
 
-
+    # adding vowels
+    for i in range(0,len(vowels)):
+        r = vowels[i]
+        text = text.replace(r, vowelsUni[i])
 
     # Hal kirima
     for i in range(0, len(consonants)):
         r = consonants[i]
         text = text.replace(r, consonantsUni[i]+"්")
 
-
-    # adding vowels
-    for i in range(0,len(vowels)):
-        r = vowels[i]
-        text = text.replace(r, vowelsUni[i])
-
     return text
-
-
-# if __name__ == '__main__':
-#     method_name = sys.argv[1]
-#     method_args = sys.argv[2:]
-#     method = globals()[method_name]  # Get the method by name
-#     result = method(*method_args)   # Call the method with the arguments
-#     print(result)
