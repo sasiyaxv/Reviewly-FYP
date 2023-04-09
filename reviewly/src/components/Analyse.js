@@ -9,12 +9,16 @@ import {
   translateToEnglish,
 } from "../ApiCalls";
 
+import LoadingScreen from "./LoadingScreen";
+
 export default function Analyse() {
   const [link, setLink] = useState("");
 
   const [fileContent, setFileContent] = useState([]);
 
   const [arrayOfReviews, setarrayOfReviews] = useState({});
+
+  const [isLoading, setLoading] = useState(false);
 
   const getInitialState = () => {
     const value = "LSTM Model";
@@ -32,9 +36,11 @@ export default function Analyse() {
       console.log("Review empty.");
       alert("Please Enter a Valid Review");
     } else {
+      setLoading(true);
+
       const allSinhala = await isSinhala(link);
 
-      if (allSinhala == "True") {
+      if (allSinhala === "True") {
         const translatedTxt = await translateToEnglish(link);
         const sentiment = await textBlob(translatedTxt);
         const newPair = { [link]: sentiment };
@@ -46,6 +52,8 @@ export default function Analyse() {
       const translatedTxt = await translateToEnglish(transliteratedTxt);
 
       const sentiment = await textBlob(translatedTxt);
+
+      setLoading(false);
 
       const newPair = { [link]: sentiment };
 
@@ -60,7 +68,22 @@ export default function Analyse() {
       textBlobAnalyze();
     }
   }
-  function downloadResults() {}
+
+  // download results button functionality
+  function downloadResults() {
+    if (Object.keys(arrayOfReviews).length === 0) {
+      alert("Nothing to download");
+    } else {
+      const element = document.createElement("a");
+      const file = new Blob([JSON.stringify(arrayOfReviews)], {
+        type: "text/plain",
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = "results.txt";
+      document.body.appendChild(element);
+      element.click();
+    }
+  }
 
   const inputFileRef = useRef(null);
 
@@ -105,9 +128,7 @@ export default function Analyse() {
             >
               <option value="LSTM">LSTM Model</option>
               <option value="textblob">Text Blob API</option>
-              {/* <option value="Cherry">Cherry</option> */}
             </select>
-            <p>{`You selected ${value}`}</p>
           </div>
 
           <button
@@ -141,13 +162,17 @@ export default function Analyse() {
           </button>
         </div>
       </div>
-      <ul>
-        {Object.keys(arrayOfReviews).map((key) => (
-          <li key={key}>
-            {key}: {arrayOfReviews[key]}
-          </li>
-        ))}
-      </ul>
+      <div className="bg-grey rounded shadow-lg p-8 ml-5 mr-5  md:max-w-screen md:mx-auto">
+        <ul>
+          {Object.keys(arrayOfReviews).map((key) => (
+            <li key={key}>
+              {key}: {arrayOfReviews[key]}
+            </li>
+          ))}
+        </ul>
+        {/*  */}
+        {isLoading && <LoadingScreen />}
+      </div>
       <Footer />
     </div>
   );

@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Homepage from "./components/Homepage";
@@ -7,9 +6,7 @@ import Login from "./components/Login";
 import Analyse from "./components/Analyse";
 import About from "./components/About";
 import Contact from "./components/Contact";
-
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase-config";
+import Previous from "./components/Previous";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +29,7 @@ const router = createBrowserRouter([
     path: "/about",
     element: <About />,
   },
+  { path: "/previous", element: <Previous /> },
   {
     path: "/contact",
     element: <Contact />,

@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { signInWithGoogle } from "../firebase-config";
-
-import { collection, getDocs, addDoc } from "firebase/firestore";
-// import { db } from "../firebase-config";
 
 export default function Register() {
   const [fname, setFname] = useState("");
@@ -17,8 +14,6 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [users, setUsers] = useState([]);
-
-  const login = () => {};
 
   const register = async () => {
     try {
@@ -144,60 +139,6 @@ export default function Register() {
           </form>
         </div>
       </div>
-
-      {/* <div>
-        <div>
-          <label>First Name : </label>
-          <input
-            onChange={(e) => setFname(e.target.value)}
-            type="text"
-            value={fname}
-            placeholder="First Name"
-          />
-        </div>
-        <div>
-          <label>Last Name : </label>
-          <input
-            onChange={(e) => setLname(e.target.value)}
-            type="text"
-            value={lname}
-            placeholder="Last Name"
-          />
-        </div>
-        <div>
-          <label>Email : </label>
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            value={email}
-            placeholder="E-mail"
-          />
-        </div>
-        <div>
-          <label>Password : </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-          />
-        </div>
-        <div>
-          <label>Confirm Password : </label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm password"
-          />
-        </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-          onClick={registerClicked}
-        >
-          Register
-        </button>
-      </div> */}
     </div>
   );
 }
