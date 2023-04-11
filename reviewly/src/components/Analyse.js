@@ -18,7 +18,7 @@ export default function Analyse() {
 
   const [arrayOfReviews, setarrayOfReviews] = useState({});
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoad, setLoading] = useState(false);
 
   const getInitialState = () => {
     const value = "LSTM Model";
@@ -189,7 +189,7 @@ export default function Analyse() {
           ))}
         </ul>
         {/*  */}
-        {isLoading && <LoadingScreen />}
+        {isLoad && <LoadingScreen />}
       </div>
       <Footer />
     </div>

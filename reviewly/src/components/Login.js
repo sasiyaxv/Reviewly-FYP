@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function loginClicked() {}
+  const { loginWithRedirect } = useAuth0();
 
   return (
     <div>
@@ -41,7 +43,10 @@ export default function Login() {
                 placeholder="Password"
               />
             </div>
-            <button className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded">
+            <button
+              onClick={() => loginWithRedirect()}
+              className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded"
+            >
               Login
             </button>
           </form>

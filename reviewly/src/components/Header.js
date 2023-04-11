@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Header() {
+  const { loginWithRedirect } = useAuth0();
   return (
     <div>
       <nav className="relative container mx-auto p-6">
@@ -25,6 +27,7 @@ export default function Header() {
             </a>
           </div>
           <a
+            onClick={() => loginWithRedirect()}
             href="register"
             className="hidden md:block p-3 px-6 pt-2 text-white bg-red-500 rounded-full baseline hover:bg-red-800"
           >
