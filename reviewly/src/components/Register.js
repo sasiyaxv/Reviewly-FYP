@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import Header from "./Header";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase-config";
-import { signInWithGoogle } from "../firebase-config";
-
 export default function Register() {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -14,43 +10,6 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [users, setUsers] = useState([]);
-
-  const register = async () => {
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // const usersRef = collection(db, "ReviewlyDb");
-
-  // const registerClicked = async () => {
-  //   await addDoc(usersRef, {
-  //     fName: fname,
-  //     lName: lname,
-  //     email: email,
-  //     password: password,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   const getUsers = async () => {
-  //     // const data = await getDocs(usersRef);
-  //     setUsers(
-  //       data.docs.map((doc) => ({
-  //         ...doc.data(),
-  //         name: doc.name,
-  //         lname: doc.lName,
-  //         email: doc.email,
-  //         reviews: doc.reviews,
-  //       }))
-  //     );
-  //     // console.log(data);
-  //   };
-  //   getUsers();
-  // }, []);
 
   return (
     <div>
@@ -119,15 +78,10 @@ export default function Register() {
                 placeholder="Confirm password"
               />
             </div>
-            <button
-              onClick={register}
-              className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded"
-            >
+            <button className="bg-green-500 hover:bg-green-700 text-white uppercase text-sm font-semibold px-4 py-2 rounded">
               SignUp
             </button>
-            <button class="login-with-google-btn" onClick={signInWithGoogle}>
-              Sign in with Google
-            </button>
+
             {users.map((user) => {
               return (
                 <div>

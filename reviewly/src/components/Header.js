@@ -25,7 +25,7 @@ export default function Header() {
             </a>
           </div>
           <a
-            href="login"
+            href="register"
             className="hidden md:block p-3 px-6 pt-2 text-white bg-red-500 rounded-full baseline hover:bg-red-800"
           >
             Signup

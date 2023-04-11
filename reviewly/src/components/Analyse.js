@@ -14,7 +14,7 @@ import LoadingScreen from "./LoadingScreen";
 export default function Analyse() {
   const [link, setLink] = useState("");
 
-  const [fileContent, setFileContent] = useState([]);
+  const [readFile, setReadFile] = useState([]);
 
   const [arrayOfReviews, setarrayOfReviews] = useState({});
 
@@ -31,23 +31,12 @@ export default function Analyse() {
     setValue(e.target.value);
   };
 
-  async function textBlobAnalyze() {
-    if (link === "") {
-      console.log("Review empty.");
-      alert("Please Enter a Valid Review");
-    } else {
+  async function sendArrayToApi(myArray) {
+    for (let i = 0; i < myArray.length; i++) {
       setLoading(true);
 
-      const allSinhala = await isSinhala(link);
-
-      if (allSinhala === "True") {
-        const translatedTxt = await translateToEnglish(link);
-        const sentiment = await textBlob(translatedTxt);
-        const newPair = { [link]: sentiment };
-
-        setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
-      }
-      const transliteratedTxt = await convertToSinhala(link);
+      // const element = myArray[i]
+      const transliteratedTxt = await convertToSinhala(myArray[i]);
 
       const translatedTxt = await translateToEnglish(transliteratedTxt);
 
@@ -55,15 +44,44 @@ export default function Analyse() {
 
       setLoading(false);
 
-      const newPair = { [link]: sentiment };
+      const newPair = { [myArray[i]]: sentiment };
 
       setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
     }
   }
 
+  // Analyze using textblob
+  async function textBlobAnalyze() {
+    setLoading(true);
+
+    const allSinhala = await isSinhala(link);
+
+    if (allSinhala === "True") {
+      const translatedTxt = await translateToEnglish(link);
+      const sentiment = await textBlob(translatedTxt);
+      const newPair = { [link]: sentiment };
+
+      setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+    }
+    const transliteratedTxt = await convertToSinhala(link);
+
+    const translatedTxt = await translateToEnglish(transliteratedTxt);
+
+    const sentiment = await textBlob(translatedTxt);
+
+    setLoading(false);
+
+    const newPair = { [link]: sentiment };
+
+    setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+  }
+
   function handleClick() {
-    if (link === "") {
+    if (link === "" && readFile.length === 0) {
       console.log("Review empty.");
+      alert("Please Enter a Valid Review");
+    } else if (link === "") {
+      sendArrayToApi(readFile);
     } else if (value == "textblob") {
       textBlobAnalyze();
     }
@@ -91,10 +109,10 @@ export default function Analyse() {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = function (event) {
-      const fileContent = event.target.result;
+      const file = event.target.result;
 
-      const array = fileContent.split(",");
-      setFileContent(array);
+      const array2 = file.split(",");
+      setReadFile(array2);
     };
     reader.readAsText(file);
   }
