@@ -7,6 +7,7 @@ import {
   isSinhala,
   textBlob,
   translateToEnglish,
+  bertAnalyze,
 } from "../ApiCalls";
 
 import LoadingScreen from "./LoadingScreen";
@@ -76,6 +77,31 @@ export default function Analyse() {
     setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
   }
 
+  async function bertSelected() {
+    setLoading(true);
+
+    const allSinhala = await isSinhala(link);
+
+    if (allSinhala === "True") {
+      const translatedTxt = await translateToEnglish(link);
+      const sentiment = await bertAnalyze(translatedTxt);
+      const newPair = { [link]: sentiment };
+
+      setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+    }
+    const transliteratedTxt = await convertToSinhala(link);
+
+    const translatedTxt = await translateToEnglish(transliteratedTxt);
+
+    const sentiment = await bertAnalyze(translatedTxt);
+
+    setLoading(false);
+
+    const newPair = { [link]: sentiment };
+
+    setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+  }
+
   function handleClick() {
     if (link === "" && readFile.length === 0) {
       console.log("Review empty.");
@@ -84,6 +110,8 @@ export default function Analyse() {
       sendArrayToApi(readFile);
     } else if (value == "textblob") {
       textBlobAnalyze();
+    } else {
+      bertSelected();
     }
   }
 
@@ -105,6 +133,7 @@ export default function Analyse() {
 
   const inputFileRef = useRef(null);
 
+  // File upload function
   function handleFileSelect(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -146,6 +175,7 @@ export default function Analyse() {
             >
               <option value="LSTM">LSTM Model</option>
               <option value="textblob">Text Blob API</option>
+              <option value="bert">BERT</option>
             </select>
           </div>
 
@@ -188,7 +218,6 @@ export default function Analyse() {
             </li>
           ))}
         </ul>
-        {/*  */}
         {isLoad && <LoadingScreen />}
       </div>
       <Footer />

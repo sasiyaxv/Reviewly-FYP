@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "./Header";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -55,44 +54,6 @@ export default function Login() {
           </a>
         </div>
       </div>
-      {/* <h2 className="text-3xl font-bold underline">Login</h2> */}
-      {/* <div>
-        <div>
-          <label>Email : </label>
-          <input
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            value={email}
-            placeholder="E-mail"
-          />
-        </div>
-        <div>
-          <label>Password : </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-          />
-        </div>
-
-        <div>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
-            onClick={loginClicked}
-            type="submit"
-          >
-            Login
-          </button>
-        </div>
-        <div>
-          <Link to={`/register`}>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-              Register
-            </button>
-          </Link>
-        </div>
-      </div> */}
     </div>
   );
 }

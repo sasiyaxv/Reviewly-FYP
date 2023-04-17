@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Footer from "./Footer";
 import Header from "./Header";
 import { useAuth0 } from "@auth0/auth0-react";
