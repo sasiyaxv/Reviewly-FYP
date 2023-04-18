@@ -19,9 +19,6 @@ export default function Header() {
             <a href="analyse" className="hover:text-gray-400">
               Analyze
             </a>
-            {/* <a href="previous" className="hover:text-gray-400">
-              Previous Reults
-            </a> */}
             <a href="contact" className="hover:text-gray-400">
               Contact
             </a>

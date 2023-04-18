@@ -33,9 +33,10 @@ export const textBlob = async (sentence) => {
 };
 
 export const bertAnalyze = async (sentence) => {
-  const response = await axios.post(BASE_URL + "getPredictionBert", {
+  const response = await axios.post(BASE_URL + "bertPrediction", {
     string: sentence,
   });
+  console.log(response);
   return response.data;
 };
 

@@ -1,3 +1,7 @@
+#  Sashminda Withanage
+#  18/04/2023
+#  Server for Reviewly
+
 from flask import Flask, jsonify, request
 
 from keras.models import load_model
@@ -5,9 +9,11 @@ import numpy as np
 import re 
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-import transliterate
 from textblob import TextBlob
+
 from deep_translator import GoogleTranslator
+
+import transliterate
 
 
 from flask_cors import CORS, cross_origin

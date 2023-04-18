@@ -79,26 +79,18 @@ export default function Analyse() {
 
   async function bertSelected() {
     setLoading(true);
-
     const allSinhala = await isSinhala(link);
-
     if (allSinhala === "True") {
       const translatedTxt = await translateToEnglish(link);
       const sentiment = await bertAnalyze(translatedTxt);
       const newPair = { [link]: sentiment };
-
       setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
     }
     const transliteratedTxt = await convertToSinhala(link);
-
     const translatedTxt = await translateToEnglish(transliteratedTxt);
-
     const sentiment = await bertAnalyze(translatedTxt);
-
     setLoading(false);
-
     const newPair = { [link]: sentiment };
-
     setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
   }
 
@@ -108,9 +100,9 @@ export default function Analyse() {
       alert("Please Enter a Valid Review");
     } else if (link === "") {
       sendArrayToApi(readFile);
-    } else if (value == "textblob") {
+    } else if (value === "textblob") {
       textBlobAnalyze();
-    } else {
+    } else if (value === "bert") {
       bertSelected();
     }
   }
