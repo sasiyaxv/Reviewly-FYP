@@ -47,6 +47,13 @@ export const translateToEnglish = async (sentence) => {
   return response.data;
 };
 
+export const dataPreprocess = async (sentence) => {
+  const response = await axios.post(PYTHON_ANYWHERE_URL + "cleanText", {
+    string: sentence,
+  });
+  return response.data;
+};
+
 export const contactDeveloper = async ({ email, heading, message }) => {
   const response = await axios.post(BASE_URL + "contactUs", {
     email: email,

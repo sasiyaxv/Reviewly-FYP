@@ -8,6 +8,7 @@ import {
   textBlob,
   translateToEnglish,
   bertAnalyze,
+  dataPreprocess,
 } from "../ApiCalls";
 
 import LoadingScreen from "./LoadingScreen";
@@ -82,13 +83,15 @@ export default function Analyse() {
     const allSinhala = await isSinhala(link);
     if (allSinhala === "True") {
       const translatedTxt = await translateToEnglish(link);
-      const sentiment = await bertAnalyze(translatedTxt);
+      const preprocessedTxt = await dataPreprocess(translatedTxt);
+      const sentiment = await bertAnalyze(preprocessedTxt);
       const newPair = { [link]: sentiment };
       setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
     }
     const transliteratedTxt = await convertToSinhala(link);
     const translatedTxt = await translateToEnglish(transliteratedTxt);
-    const sentiment = await bertAnalyze(translatedTxt);
+    const preprocessedTxt = await dataPreprocess(translatedTxt);
+    const sentiment = await bertAnalyze(preprocessedTxt);
     setLoading(false);
     const newPair = { [link]: sentiment };
     setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
