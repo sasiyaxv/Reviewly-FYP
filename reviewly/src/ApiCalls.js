@@ -40,6 +40,14 @@ export const bertAnalyze = async (sentence) => {
   return response.data;
 };
 
+export const lstmAnalyze = async (sentence) => {
+  const response = await axios.post(PYTHON_ANYWHERE_URL + "getPrediction", {
+    string: sentence,
+  });
+  console.log(response);
+  return response.data;
+};
+
 export const translateToEnglish = async (sentence) => {
   const response = await axios.post(PYTHON_ANYWHERE_URL + "toEnglish", {
     string: sentence,

@@ -9,6 +9,7 @@ import {
   translateToEnglish,
   bertAnalyze,
   dataPreprocess,
+  lstmAnalyze,
 } from "../ApiCalls";
 
 import LoadingScreen from "./LoadingScreen";
@@ -23,7 +24,7 @@ export default function Analyse() {
   const [isLoad, setLoading] = useState(false);
 
   const getInitialState = () => {
-    const value = "LSTM Model";
+    const value = "LSTM";
     return value;
   };
 
@@ -97,6 +98,25 @@ export default function Analyse() {
     setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
   }
 
+  async function lstmSelected() {
+    setLoading(true);
+    const allSinhala = await isSinhala(link);
+    if (allSinhala === "True") {
+      const translatedTxt = await translateToEnglish(link);
+      const preprocessedTxt = await dataPreprocess(translatedTxt);
+      const sentiment = await lstmAnalyze(preprocessedTxt);
+      const newPair = { [link]: sentiment };
+      setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+    }
+    const transliteratedTxt = await convertToSinhala(link);
+    const translatedTxt = await translateToEnglish(transliteratedTxt);
+    const preprocessedTxt = await dataPreprocess(translatedTxt);
+    const sentiment = await lstmAnalyze(preprocessedTxt);
+    setLoading(false);
+    const newPair = { [link]: sentiment };
+    setarrayOfReviews((prevState) => ({ ...prevState, ...newPair }));
+  }
+
   function handleClick() {
     if (link === "" && readFile.length === 0) {
       console.log("Review empty.");
@@ -107,6 +127,8 @@ export default function Analyse() {
       textBlobAnalyze();
     } else if (value === "bert") {
       bertSelected();
+    } else if (value === "LSTM") {
+      lstmSelected();
     }
   }
 
